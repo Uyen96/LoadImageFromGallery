@@ -7,7 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
 import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.MyViewHolder> {
@@ -15,7 +17,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.MyViewHolder
     private Context mContext;
     private List<Image> mImages;
 
-    public ImageAdapter(MainActivity context, List<Image> images) {
+    public ImageAdapter(Context context, List<Image> images) {
         mContext = context;
         mImages = images;
     }
@@ -29,12 +31,8 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.MyViewHolder
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
-        Image images = mImages.get(i);
-        Picasso.with(mContext)
-                .load(images.getUri())
-                .placeholder(R.mipmap.ic_launcher)
-                .into(myViewHolder.mImageView);
+    public void onBindViewHolder(MyViewHolder myViewHolder, int i) {
+        myViewHolder.bindData(mImages.get(i));
     }
 
     @Override
@@ -43,11 +41,18 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.MyViewHolder
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public ImageView mImageView;
+        private ImageView mImageView;
 
-        public MyViewHolder(View view){
+        public MyViewHolder(View view) {
             super(view);
             mImageView = view.findViewById(R.id.image);
+        }
+
+        public void bindData(Image image) {
+            Picasso.with(mContext)
+                    .load(image.getUri())
+                    .placeholder(R.mipmap.ic_launcher)
+                    .into(mImageView);
         }
     }
 }
